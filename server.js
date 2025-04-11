@@ -8,8 +8,27 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
+}));
 app.use(bodyParser.json());
+
+// Inject Stripe publishable key into HTML responses
+app.use((req, res, next) => {
+  const originalSend = res.send;
+  res.send = function(body) {
+    if (typeof body === 'string' && body.includes('</head>')) {
+      const stripeKey = process.env.STRIPE_PUBLISHABLE_KEY || 'pk_test_your_stripe_publishable_key';
+      const stripeMetaTag = `<meta name="stripe-key" content="${stripeKey}">`;
+      body = body.replace('</head>', `${stripeMetaTag}</head>`);
+    }
+    originalSend.call(this, body);
+  };
+  next();
+});
+
 app.use(express.static('.')); // Serve static files from current directory
 
 // In-memory storage (replace with a real database in production)

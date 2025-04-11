@@ -1,7 +1,10 @@
 // PoolBet API Client
 // This file connects the frontend to the server
 
-const API_URL = 'http://localhost:3000/api';
+// Dynamically detect API URL - uses current origin for production, localhost for development
+const API_URL = window.location.hostname === 'localhost' 
+  ? 'http://localhost:3000/api' 
+  : `${window.location.origin}/api`;
 
 // API request function with error handling
 async function apiRequest(endpoint, method = 'GET', data = null) {
@@ -81,8 +84,9 @@ async function initializeStripe(poolId, email) {
     // Create a payment intent on the server
     const { clientSecret, amount } = await PaymentAPI.createPaymentIntent(poolId, email);
     
-    // Get Stripe publishable key - In a real app, this would be provided by the server
-    const stripe = Stripe('pk_test_TYooMQauvdEDq54NiTphI7jx');
+    // Get Stripe publishable key from meta tag (will be inserted by server)
+    const stripeKey = document.querySelector('meta[name="stripe-key"]').getAttribute('content');
+    const stripe = Stripe(stripeKey);
     
     // Create Stripe Elements instance
     const elements = stripe.elements();
