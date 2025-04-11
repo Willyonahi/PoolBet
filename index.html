@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PoolBet - Bet with Friends</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="client.js"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <header class="bg-blue-600 text-white shadow-md">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-3xl font-bold">PoolBet</h1>
+                    <p class="text-lg">Pool your money, one winner takes all!</p>
+                </div>
+                <nav>
+                    <ul class="flex space-x-6">
+                        <li><a href="index.html" class="hover:underline">Home</a></li>
+                        <li><a href="future-backend.html" class="hover:underline">Technical Details</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto p-4 mt-8">
+        <div class="bg-white rounded-lg shadow-md p-6 max-w-4xl mx-auto">
+            <h2 class="text-2xl font-bold mb-6 text-center">Create a New Pool</h2>
+            
+            <form id="poolForm" class="space-y-6">
+                <div>
+                    <label for="poolName" class="block text-sm font-medium text-gray-700">Pool Name</label>
+                    <input type="text" id="poolName" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required>
+                </div>
+                
+                <div>
+                    <label for="betAmount" class="block text-sm font-medium text-gray-700">Bet Amount (USD)</label>
+                    <input type="number" id="betAmount" min="1" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required>
+                </div>
+                
+                <div>
+                    <label for="participants" class="block text-sm font-medium text-gray-700">Participants (emails, comma separated)</label>
+                    <textarea id="participants" rows="3" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required></textarea>
+                </div>
+                
+                <div>
+                    <label for="eventDescription" class="block text-sm font-medium text-gray-700">What are you betting on?</label>
+                    <textarea id="eventDescription" rows="3" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required></textarea>
+                </div>
+                
+                <div>
+                    <label for="endDate" class="block text-sm font-medium text-gray-700">End Date</label>
+                    <input type="date" id="endDate" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required>
+                </div>
+                
+                <div class="pt-4">
+                    <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Create Pool</button>
+                </div>
+            </form>
+        </div>
+        
+        <div class="mt-12 bg-white rounded-lg shadow-md p-6 max-w-4xl mx-auto">
+            <h2 class="text-2xl font-bold mb-6 text-center">Active Pools</h2>
+            <div id="activePools" class="space-y-4">
+                <!-- Active pools will be listed here via JavaScript -->
+                <p class="text-center text-gray-500">No active pools yet. Create one above!</p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-white mt-16 py-8">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; 2023 PoolBet - A friendly betting platform</p>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html> 

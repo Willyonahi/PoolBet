@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join Pool - PoolBet</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <header class="bg-blue-600 text-white shadow-md">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-3xl font-bold">PoolBet</h1>
+                    <p class="text-lg">Pool your money, one winner takes all!</p>
+                </div>
+                <nav>
+                    <ul class="flex space-x-6">
+                        <li><a href="index.html" class="hover:underline">Home</a></li>
+                        <li><a href="future-backend.html" class="hover:underline">Technical Details</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto p-4 mt-8">
+        <div class="bg-white rounded-lg shadow-md p-6 max-w-xl mx-auto">
+            <h2 class="text-2xl font-bold mb-6 text-center">Join Pool</h2>
+            
+            <div id="poolInfo" class="mb-8">
+                <!-- Pool info will be populated by JavaScript -->
+                <div class="animate-pulse">
+                    <div class="h-6 bg-gray-200 rounded w-3/4 mb-4"></div>
+                    <div class="h-4 bg-gray-200 rounded w-full mb-2"></div>
+                    <div class="h-4 bg-gray-200 rounded w-5/6 mb-2"></div>
+                    <div class="h-4 bg-gray-200 rounded w-4/6 mb-4"></div>
+                    <div class="flex justify-between">
+                        <div class="h-5 bg-gray-200 rounded w-1/4"></div>
+                        <div class="h-5 bg-gray-200 rounded w-1/4"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <form id="joinForm" class="space-y-6">
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700">Your Email</label>
+                    <input type="email" id="email" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required>
+                    <p class="mt-1 text-sm text-gray-500">Must match an invited participant email</p>
+                </div>
+                
+                <div>
+                    <label for="name" class="block text-sm font-medium text-gray-700">Your Name</label>
+                    <input type="text" id="name" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required>
+                </div>
+                
+                <div class="border-t border-gray-200 pt-4">
+                    <div class="flex justify-between mb-4">
+                        <span class="font-medium">Bet Amount:</span>
+                        <span id="betAmount" class="font-bold">$0.00</span>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-4 rounded-md mb-4">
+                        <h3 class="text-lg font-medium mb-2">Payment Method</h3>
+                        <div class="mb-4">
+                            <p class="flex items-center text-sm text-gray-600 mb-2">
+                                <svg class="w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                                </svg>
+                                Secure payment processing by Stripe
+                            </p>
+                        </div>
+                        <div class="border border-gray-300 rounded-md p-3 bg-white">
+                            <div class="flex items-center">
+                                <input id="payment-card" name="payment-method" type="radio" checked class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300">
+                                <label for="payment-card" class="ml-3 block text-sm font-medium text-gray-700 flex items-center">
+                                    Credit or Debit Card
+                                    <div class="flex ml-3 space-x-1">
+                                        <img src="https://cdn.jsdelivr.net/npm/payment-icons@1.1.0/min/flat/visa.svg" class="h-6" alt="Visa">
+                                        <img src="https://cdn.jsdelivr.net/npm/payment-icons@1.1.0/min/flat/mastercard.svg" class="h-6" alt="Mastercard">
+                                        <img src="https://cdn.jsdelivr.net/npm/payment-icons@1.1.0/min/flat/amex.svg" class="h-6" alt="Amex">
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Stripe Card Element -->
+                    <div id="card-element" class="mt-2 p-3 border border-gray-300 rounded-md">
+                        <!-- Stripe Element will be inserted here -->
+                    </div>
+                    <div id="card-errors" class="mt-1 text-sm text-red-600" role="alert"></div>
+                    
+                    <div class="mt-4 bg-blue-50 p-3 rounded-md text-sm">
+                        <p class="text-blue-800 font-medium">Payment Breakdown:</p>
+                        <div class="mt-2 flex justify-between">
+                            <span>Bet Amount:</span>
+                            <span id="bet-amount-display">$0.00</span>
+                        </div>
+                        <div class="mt-1 flex justify-between">
+                            <span>Platform Fee (10%):</span>
+                            <span id="platform-fee-display">$0.00</span>
+                        </div>
+                        <div class="mt-1 border-t border-blue-200 pt-1 flex justify-between font-medium">
+                            <span>Total:</span>
+                            <span id="total-amount-display">$0.00</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="pt-4">
+                    <p class="text-sm text-gray-500 mb-4">By joining this pool, you agree to the terms and conditions.</p>
+                    <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 btn-pulse flex justify-center items-center">
+                        <span>Pay & Join Pool</span>
+                        <svg class="ml-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                        </svg>
+                    </button>
+                </div>
+            </form>
+            
+            <div class="mt-6 text-center">
+                <a href="index.html" class="text-blue-600 hover:text-blue-800">Back to Home</a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-white mt-16 py-8">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; 2023 PoolBet - A friendly betting platform</p>
+        </div>
+    </footer>
+
+    <script src="join-pool.js"></script>
+</body>
+</html> 

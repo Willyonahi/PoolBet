@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Future Backend - PoolBet</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <header class="bg-blue-600 text-white shadow-md">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-3xl font-bold">PoolBet</h1>
+                    <p class="text-lg">Pool your money, one winner takes all!</p>
+                </div>
+                <nav>
+                    <ul class="flex space-x-6">
+                        <li><a href="index.html" class="hover:underline">Home</a></li>
+                        <li><a href="future-backend.html" class="hover:underline">Technical Details</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto p-4 mt-8">
+        <div class="bg-white rounded-lg shadow-md p-6 max-w-4xl mx-auto">
+            <h2 class="text-2xl font-bold mb-6 text-center">Technical Implementation</h2>
+            
+            <div class="mb-8">
+                <p class="mb-4">The current implementation of PoolBet uses browser localStorage for data storage, which is suitable for demonstration purposes but not for a production application. In a real-world scenario, a proper backend would be implemented with the following components:</p>
+                
+                <h3 class="text-xl font-medium mt-6 mb-3">Backend Architecture</h3>
+                <div class="bg-gray-50 p-4 rounded-md mb-6">
+                    <pre class="text-sm overflow-x-auto">
++-----------------+       +----------------+       +---------------+
+|                 |       |                |       |               |
+|  Web Frontend   |------>|  API Server    |------>|   Database    |
+|  (Next.js/React)|       |  (Node.js)     |       |   (MongoDB)   |
+|                 |<------|                |<------|               |
++-----------------+       +----------------+       +---------------+
+                                   |
+                                   |
+                          +----------------+       +---------------+
+                          |                |       |               |
+                          |  Stripe        |------>| Email Service |
+                          |  Payments      |       |               |
+                          |                |       |               |
+                          +----------------+       +---------------+
+</pre>
+                </div>
+                
+                <h3 class="text-xl font-medium mb-3">Stripe Payment Integration</h3>
+                <div class="flex flex-col md:flex-row gap-6 mb-6">
+                    <div class="flex-1 bg-blue-50 p-4 rounded-md">
+                        <h4 class="font-medium mb-2 text-blue-800">Payment Processing</h4>
+                        <ul class="list-disc pl-5 space-y-1 text-sm">
+                            <li>Secure payment processing using Stripe API</li>
+                            <li>Payment intents for authorized transactions</li>
+                            <li>Handling of various payment methods</li>
+                            <li>Automatic receipts and confirmations</li>
+                            <li>Fraud prevention and dispute handling</li>
+                        </ul>
+                    </div>
+                    <div class="flex-1 bg-green-50 p-4 rounded-md">
+                        <h4 class="font-medium mb-2 text-green-800">Platform Fee (10%)</h4>
+                        <ul class="list-disc pl-5 space-y-1 text-sm">
+                            <li>10% platform fee applied to all pool amounts</li>
+                            <li>Automatic calculation during pool creation</li>
+                            <li>Fee transparency for all participants</li>
+                            <li>Stripe Connect for fee distribution</li>
+                            <li>Automated reporting and accounting</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <h3 class="text-xl font-medium mb-3">Key Components</h3>
+                <ul class="list-disc pl-5 space-y-2 mb-6">
+                    <li><strong>User Authentication:</strong> Secure login and registration system with email verification.</li>
+                    <li><strong>RESTful API:</strong> Node.js/Express backend to handle all data operations.</li>
+                    <li><strong>Database:</strong> MongoDB for storing user accounts, pools, and transaction history.</li>
+                    <li><strong>Payment Processing:</strong> Integration with Stripe for secure payment handling and fee collection.</li>
+                    <li><strong>Email Notifications:</strong> Automated emails for pool invitations, payment confirmations, and winner announcements.</li>
+                    <li><strong>Security:</strong> HTTPS, rate limiting, input validation, and other security best practices.</li>
+                </ul>
+                
+                <h3 class="text-xl font-medium mb-3">Stripe Payment Flow</h3>
+                <div class="bg-gray-50 p-4 rounded-md mb-6">
+                    <ol class="list-decimal pl-5 space-y-2 text-sm">
+                        <li><strong>Create Payment Intent:</strong> When a user joins a pool, the backend creates a payment intent using the Stripe API.</li>
+                        <li><strong>Collect Payment Details:</strong> The frontend collects the user's payment information using Stripe Elements.</li>
+                        <li><strong>Confirm Payment:</strong> The payment is confirmed with Stripe, ensuring it's authorized and not fraudulent.</li>
+                        <li><strong>Handle Success/Failure:</strong> Based on the payment result, the user is either added to the pool or shown an error.</li>
+                        <li><strong>Webhook Processing:</strong> Stripe webhooks handle asynchronous events like successful charges or disputes.</li>
+                    </ol>
+                </div>
+                
+                <h3 class="text-xl font-medium mb-3">Backend API Endpoints</h3>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white border">
+                        <thead>
+                            <tr>
+                                <th class="py-2 px-4 border-b text-left">Endpoint</th>
+                                <th class="py-2 px-4 border-b text-left">Method</th>
+                                <th class="py-2 px-4 border-b text-left">Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="py-2 px-4 border-b">/api/auth/register</td>
+                                <td class="py-2 px-4 border-b">POST</td>
+                                <td class="py-2 px-4 border-b">Create a new user account</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-4 border-b">/api/auth/login</td>
+                                <td class="py-2 px-4 border-b">POST</td>
+                                <td class="py-2 px-4 border-b">Authenticate a user</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-4 border-b">/api/pools</td>
+                                <td class="py-2 px-4 border-b">GET</td>
+                                <td class="py-2 px-4 border-b">Get list of pools</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-4 border-b">/api/pools</td>
+                                <td class="py-2 px-4 border-b">POST</td>
+                                <td class="py-2 px-4 border-b">Create a new pool</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-4 border-b">/api/pools/:id</td>
+                                <td class="py-2 px-4 border-b">GET</td>
+                                <td class="py-2 px-4 border-b">Get details of a specific pool</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-4 border-b">/api/pools/:id/join</td>
+                                <td class="py-2 px-4 border-b">POST</td>
+                                <td class="py-2 px-4 border-b">Join a pool</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-4 border-b">/api/pools/:id/winner</td>
+                                <td class="py-2 px-4 border-b">POST</td>
+                                <td class="py-2 px-4 border-b">Declare a winner for a pool</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-4 border-b">/api/payments/create-intent</td>
+                                <td class="py-2 px-4 border-b">POST</td>
+                                <td class="py-2 px-4 border-b">Create a Stripe payment intent</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-4 border-b">/api/payments/webhook</td>
+                                <td class="py-2 px-4 border-b">POST</td>
+                                <td class="py-2 px-4 border-b">Handle Stripe webhook notifications</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <h3 class="text-xl font-medium mt-6 mb-3">Database Schema</h3>
+                <div class="bg-gray-50 p-4 rounded-md">
+                    <pre class="text-sm overflow-x-auto">
+// User Schema
+{
+  _id: ObjectId,
+  email: String,
+  name: String,
+  password: String (hashed),
+  createdAt: Date,
+  updatedAt: Date
+}
+
+// Pool Schema
+{
+  _id: ObjectId,
+  name: String,
+  description: String,
+  betAmount: Number,
+  totalAmount: Number,
+  platformFee: Number,
+  feePercentage: Number,
+  winnerAmount: Number,
+  endDate: Date,
+  status: String (active, completed),
+  createdBy: ObjectId (ref: User),
+  winner: ObjectId (ref: User),
+  createdAt: Date,
+  updatedAt: Date
+}
+
+// Participant Schema
+{
+  _id: ObjectId,
+  pool: ObjectId (ref: Pool),
+  user: ObjectId (ref: User),
+  paymentStatus: String (pending, paid),
+  paymentId: String,
+  paymentMethod: String,
+  joinedAt: Date
+}
+
+// Transaction Schema
+{
+  _id: ObjectId,
+  user: ObjectId (ref: User),
+  pool: ObjectId (ref: Pool),
+  amount: Number,
+  platformFeeAmount: Number,
+  type: String (payment, payout),
+  status: String (pending, completed, failed),
+  paymentMethod: String,
+  stripePaymentId: String,
+  createdAt: Date
+}
+</pre>
+                </div>
+            </div>
+            
+            <div class="text-center mt-8">
+                <a href="index.html" class="inline-block bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Back to Home</a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-white mt-16 py-8">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; 2023 PoolBet - A friendly betting platform</p>
+        </div>
+    </footer>
+</body>
+</html> 

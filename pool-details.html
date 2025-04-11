@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pool Details - PoolBet</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <header class="bg-blue-600 text-white shadow-md">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-3xl font-bold">PoolBet</h1>
+                    <p class="text-lg">Pool your money, one winner takes all!</p>
+                </div>
+                <nav>
+                    <ul class="flex space-x-6">
+                        <li><a href="index.html" class="hover:underline">Home</a></li>
+                        <li><a href="future-backend.html" class="hover:underline">Technical Details</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto p-4 mt-8">
+        <div class="bg-white rounded-lg shadow-md p-6 max-w-4xl mx-auto">
+            <div id="poolHeader" class="mb-6">
+                <!-- Pool header will be populated by JavaScript -->
+                <div class="animate-pulse">
+                    <div class="h-8 bg-gray-200 rounded w-1/2 mb-4"></div>
+                    <div class="h-4 bg-gray-200 rounded w-full mb-2"></div>
+                    <div class="h-4 bg-gray-200 rounded w-5/6 mb-2"></div>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="bg-blue-50 p-4 rounded-md">
+                    <h3 class="font-medium mb-2 text-blue-800">Total Pool</h3>
+                    <p id="totalPool" class="text-2xl font-bold">$0.00</p>
+                </div>
+                
+                <div class="bg-green-50 p-4 rounded-md">
+                    <h3 class="font-medium mb-2 text-green-800">Participants</h3>
+                    <p id="participantCount" class="text-2xl font-bold">0</p>
+                    <p id="joinedCount" class="text-sm text-green-700">0 have joined</p>
+                </div>
+                
+                <div class="bg-purple-50 p-4 rounded-md">
+                    <h3 class="font-medium mb-2 text-purple-800">End Date</h3>
+                    <p id="endDate" class="text-2xl font-bold">-</p>
+                    <p id="daysRemaining" class="text-sm text-purple-700">- days remaining</p>
+                </div>
+            </div>
+            
+            <div id="statusSection" class="mb-8">
+                <!-- Status section will be populated by JavaScript -->
+            </div>
+            
+            <div class="border-t border-gray-200 pt-6 mb-8">
+                <h3 class="text-xl font-medium mb-4">Participants</h3>
+                <div id="participantsList" class="space-y-2">
+                    <!-- Participants will be listed here by JavaScript -->
+                    <div class="animate-pulse">
+                        <div class="h-10 bg-gray-200 rounded w-full mb-2"></div>
+                        <div class="h-10 bg-gray-200 rounded w-full mb-2"></div>
+                        <div class="h-10 bg-gray-200 rounded w-full mb-2"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="adminSection" class="border-t border-gray-200 pt-6 mb-6 hidden">
+                <h3 class="text-xl font-medium mb-4">Pool Administration</h3>
+                
+                <div class="bg-yellow-50 p-4 rounded-md mb-4">
+                    <p class="text-sm text-yellow-800 mb-2">As the pool creator, you can select the winner once the event has concluded.</p>
+                </div>
+                
+                <form id="winnerForm" class="space-y-4">
+                    <div>
+                        <label for="winnerSelect" class="block text-sm font-medium text-gray-700">Select Winner</label>
+                        <select id="winnerSelect" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                            <option value="">-- Select a winner --</option>
+                            <!-- Options will be populated by JavaScript -->
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Declare Winner</button>
+                </form>
+            </div>
+            
+            <div class="flex justify-between">
+                <a href="index.html" class="text-blue-600 hover:text-blue-800">Back to Home</a>
+                <button id="shareButton" class="text-blue-600 hover:text-blue-800 flex items-center">
+                    <svg class="w-5 h-5 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z"></path>
+                    </svg>
+                    Share Pool
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-white mt-16 py-8">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; 2023 PoolBet - A friendly betting platform</p>
+        </div>
+    </footer>
+
+    <script src="pool-details.js"></script>
+</body>
+</html> 

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Success - PoolBet</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <header class="bg-blue-600 text-white shadow-md">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-3xl font-bold">PoolBet</h1>
+                    <p class="text-lg">Pool your money, one winner takes all!</p>
+                </div>
+                <nav>
+                    <ul class="flex space-x-6">
+                        <li><a href="index.html" class="hover:underline">Home</a></li>
+                        <li><a href="future-backend.html" class="hover:underline">Technical Details</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto p-4 mt-8">
+        <div class="bg-white rounded-lg shadow-md p-6 max-w-xl mx-auto text-center">
+            <div class="flex justify-center mb-6">
+                <svg class="w-20 h-20 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+            </div>
+            
+            <h2 class="text-2xl font-bold mb-4">Payment Successful!</h2>
+            <p class="text-lg mb-6">You've successfully joined the pool.</p>
+            
+            <div id="poolDetails" class="mb-8">
+                <!-- Pool details will be populated by JavaScript -->
+                <div class="animate-pulse">
+                    <div class="h-6 bg-gray-200 rounded w-1/2 mx-auto mb-4"></div>
+                    <div class="h-4 bg-gray-200 rounded w-3/4 mx-auto mb-2"></div>
+                    <div class="h-4 bg-gray-200 rounded w-1/3 mx-auto mb-4"></div>
+                </div>
+            </div>
+            
+            <div class="bg-green-50 p-4 rounded-md mb-6 text-left">
+                <div class="flex items-center mb-3">
+                    <svg class="h-6 w-6 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                    </svg>
+                    <p class="text-green-800 font-medium">Payment Processed Securely via Stripe</p>
+                </div>
+                <div class="ml-8">
+                    <p class="text-sm text-green-800" id="payment-id">Transaction ID: <span class="font-mono">ch_1234567890</span></p>
+                </div>
+            </div>
+            
+            <div class="bg-blue-50 p-4 rounded-md mb-6 text-left">
+                <h3 class="font-medium mb-2">What happens next?</h3>
+                <ol class="list-decimal pl-5 space-y-2 text-sm">
+                    <li>We've sent a payment confirmation email with the pool details.</li>
+                    <li>Once all participants have joined, everyone will be notified.</li>
+                    <li>After the event, the pool creator will declare the winner.</li>
+                    <li>The winner will receive the total pool amount minus the 10% platform fee!</li>
+                </ol>
+            </div>
+            
+            <div class="space-x-4">
+                <a href="index.html" class="inline-block bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Back to Home</a>
+                <button id="shareButton" class="inline-block border border-blue-600 text-blue-600 py-2 px-4 rounded-md hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Share with Friends</button>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-white mt-16 py-8">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; 2023 PoolBet - A friendly betting platform</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Get pool ID from URL parameter
+            const urlParams = new URLSearchParams(window.location.search);
+            const poolId = urlParams.get('poolId');
+            
+            if (!poolId) {
+                // No pool ID provided, redirect to home
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            // Load pool data
+            const pools = JSON.parse(localStorage.getItem('pools')) || [];
+            const pool = pools.find(p => p.id === poolId);
+            
+            if (!pool) {
+                // Pool not found, redirect to home
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            // Get current user's payment from the most recently joined participant
+            const currentUser = pool.participantsJoined[pool.participantsJoined.length - 1];
+            if (currentUser && currentUser.paymentId) {
+                document.getElementById('payment-id').innerHTML = 
+                    `Transaction ID: <span class="font-mono">${currentUser.paymentId}</span>`;
+            }
+            
+            // Display pool details
+            const poolDetailsElement = document.getElementById('poolDetails');
+            poolDetailsElement.innerHTML = `
+                <h3 class="text-xl font-bold text-blue-600 mb-2">${pool.name}</h3>
+                <p class="text-gray-700 mb-2">Total Pool: $${pool.totalAmount.toFixed(2)}</p>
+                <p class="text-gray-700 mb-2">Your Bet Amount: $${pool.betAmount.toFixed(2)}</p>
+                <p class="text-gray-700 mb-2">Winner Will Receive: $${pool.winnerAmount.toFixed(2)}</p>
+                <p class="text-gray-500 text-sm">End Date: ${new Date(pool.endDate).toLocaleDateString()}</p>
+            `;
+            
+            // Set up share button
+            const shareButton = document.getElementById('shareButton');
+            shareButton.addEventListener('click', () => {
+                // Create the share URL - in a real app this would be a proper URL
+                const shareUrl = `${window.location.origin}/join-pool.html?id=${poolId}`;
+                
+                // Check if Web Share API is supported
+                if (navigator.share) {
+                    navigator.share({
+                        title: `Join my PoolBet: ${pool.name}`,
+                        text: `I've joined a betting pool "${pool.name}" on PoolBet. Join me and bet $${pool.betAmount}!`,
+                        url: shareUrl
+                    }).catch(error => {
+                        console.log('Error sharing:', error);
+                        fallbackShare(shareUrl);
+                    });
+                } else {
+                    fallbackShare(shareUrl);
+                }
+            });
+            
+            // Fallback share function
+            function fallbackShare(url) {
+                prompt('Copy this link to share with your friends:', url);
+            }
+        });
+    </script>
+</body>
+</html> 
