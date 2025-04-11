@@ -2,7 +2,8 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const stripe = require('stripe')('sk_test_51Ov6M3DyrPRuHyiZu75kZHUcKylNIBH2NLxlKvAf3lUUZBKPVnDDePf4LQkSnqW2IeChLrPTEatflXbDuxbSrHdX00UgkOB4Gu');
+require('dotenv').config();
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -30,7 +31,7 @@ app.post('/api/pools', (req, res) => {
   }
 
   // Calculate fees
-  const PLATFORM_FEE_PERCENTAGE = 10;
+  const PLATFORM_FEE_PERCENTAGE = parseInt(process.env.PLATFORM_FEE_PERCENTAGE || 10);
   const totalBetAmount = pool.betAmount * pool.participants.length;
   const platformFee = (totalBetAmount * PLATFORM_FEE_PERCENTAGE) / 100;
   const winnerAmount = totalBetAmount - platformFee;
@@ -189,6 +190,7 @@ app.post('/api/pools/:id/winner', (req, res) => {
     poolId: id,
     email: winnerEmail,
     amount: pool.winnerAmount,
+    platformFee: pool.platformFee,
     type: 'payout',
     status: 'completed',
     createdAt: new Date().toISOString()
